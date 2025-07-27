@@ -210,7 +210,7 @@ export class Email {
     this.resolveBCC()
     this.resolveSubject()
     this.headers['Date'] = new Date().toUTCString()
-    this.headers['Message-ID'] =
+    this.headers['Message-ID'] = this.headers['Message-ID'] || 
       `<${crypto.randomUUID()}@${this.from.email.split('@').pop()}>`
   }
 
