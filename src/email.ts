@@ -264,7 +264,7 @@ export class Email {
         }
         return user.email
       })
-      this.headers['BCC'] = bccAddresses.join(', ')
+      // this.headers['BCC'] = bccAddresses.join(', ')
     }
   }
 
