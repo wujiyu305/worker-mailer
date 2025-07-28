@@ -134,17 +134,15 @@ export class Email {
 
     if (this.text) {
       emailData += `--${alternativeBoundary}\r\n`
-      emailData += `Content-Type: text/plain; charset="UTF-8"\r\n\r\n`
-      // maximum line length is 998 characters (see RFC 2046)
-      const lines = this.wrapText(this.text, 998)
+      emailData += `Content-Type: text/plain; charset="utf-8"\r\n\r\n`
+      const lines = this.wrapText(this.text, 998)   // maximum line length is 998 characters (see RFC 2046)
       emailData += `${lines.join('\r\n')}\r\n\r\n`
     }
 
     if (this.html) {
       emailData += `--${alternativeBoundary}\r\n`
-      emailData += `Content-Type: text/html; charset="UTF-8"\r\n\r\n`
-      // maximum line length is 998 characters (see RFC 2046)
-      const lines = this.wrapText(this.html, 998)
+      emailData += `Content-Type: text/html; charset="utf-8"\r\nContent-Transfer-Encoding: base64\r\n\r\n`
+      const lines = this.wrapText(Buffer.from(this.html, 'utf8').toString('base64'), 76)    // maximum line length is 998 characters (see RFC 2046)
       emailData += `${lines.join('\r\n')}\r\n\r\n`
     }
 
@@ -233,7 +231,7 @@ export class Email {
   }
 
   private resolveSubject() {
-    this.headers['Subject'] = this.subject
+    this.headers['Subject'] = `=?utf-8?b?${Buffer.from(this.subject, 'utf8').toString('base64')}?=`
   }
 
   private resolveReply() {
